@@ -1,0 +1,229 @@
+Test your integration
+Learn about the different methods to test your integration before going live.
+NOT A DEVELOPER?
+Hire a Stripe certified expert or use a prebuilt solution created by one of our verified partners (no code required).
+
+This page includes test card numbers and other information to make sure your integration works as planned. Use it to trigger different flows in your integration and ensure they are handled accordingly.
+
+Payment Intents API
+When using the Payment Intents API with Stripe’s client libraries and SDKs, ensure that:
+
+Authentication flows are triggered when required (use the regulatory test card numbers and PaymentMethods.)
+No authentication (default U.S. card): 4242 4242 4242 4242.
+Authentication required: 4000 0027 6000 3184.
+The PaymentIntent is created with an idempotency key to avoid erroneously creating duplicate PaymentIntents for the same purchase.
+Errors are caught and displayed properly in the UI.
+Charges API
+When using the Charges API with Stripe’s client libraries and SDKs, ensure that:
+
+The card Element is passed correctly to createToken in your submit handler.
+In the response handler for createToken, card errors are handled and displayed properly.
+Only valid tokens are passed to your server as part of payment form submission.
+Server-side code
+In your server-side code, ensure that:
+
+All requests are being made successfully. You may find it useful to view your account’s events and logs as you test your integration.
+All API errors are handled properly.
+Relevant webhooks are handled correctly.
+When you’re ready to take your integration live, replace your test publishable and secret API keys with live ones. Live payments cannot be processed if your integration is still using your test keys.
+
+Basic test card numbers 
+Genuine card information cannot be used in test mode. Instead, use any of the following test card numbers, a valid expiration date in the future, and any random CVC number, to create a successful payment. Each basic test card’s billing country is set to U.S. If you need to create test card payments using cards for other billing countries, use our international test cards.
+
+
+Card numbers
+
+Tokens
+
+PaymentMethods
+NUMBER	BRAND	CVC	DATE
+4242424242424242	Visa	Any 3 digits	Any future date
+4000056655665556	Visa (debit)	Any 3 digits	Any future date
+5555555555554444	Mastercard	Any 3 digits	Any future date
+2223003122003222	Mastercard (2-series)	Any 3 digits	Any future date
+5200828282828210	Mastercard (debit)	Any 3 digits	Any future date
+5105105105105100	Mastercard (prepaid)	Any 3 digits	Any future date
+378282246310005	American Express	Any 4 digits	Any future date
+371449635398431	American Express	Any 4 digits	Any future date
+6011111111111117	Discover	Any 3 digits	Any future date
+6011000990139424	Discover	Any 3 digits	Any future date
+3056930009020004	Diners Club	Any 3 digits	Any future date
+36227206271667	Diners Club (14 digit card)	Any 3 digits	Any future date
+3566002020360505	JCB	Any 3 digits	Any future date
+6200000000000005	UnionPay	Any 3 digits	Any future date
+We recommend using our test IDs when testing your integration and creating charges, instead of passing card information directly to the API. Using these test IDs in place of card numbers helps ensure your production integration is developed in a PCI compliant manner and is not going to handle card information directly. Each test ID is human-readable and represents card information that has been tokenized with our client-side libraries (e.g., Stripe Elements, Stripe.js).
+
+International test card numbers 
+You can use any of the following test cards to simulate a successful payment for different billing countries.
+
+
+Americas
+
+Europe, Middle East, and Africa
+
+Asia-Pacific
+NUMBER	TOKEN	PAYMENT METHOD	COUNTRY	BRAND
+4242424242424242	tok_us	pm_card_us	United States (US)	Visa
+4000000760000002	tok_br	pm_card_br	Brazil (BR)	Visa
+4000001240000000	tok_ca	pm_card_ca	Canada (CA)	Visa
+4000004840008001	tok_mx	pm_card_mx	Mexico (MX)	Visa
+Regulatory (3D Secure) test card numbers 
+The following card information tests payments affected by regional regulations such as Strong Customer Authentication (SCA). Use it to test saving cards with the Setup Intents API.
+
+
+Card numbers
+
+PaymentMethods
+NUMBER	DESCRIPTION
+4000002500003155	This card requires authentication for one-time payments. However, if you set up this card and use the saved card for subsequent off-session payments, no further authentication is needed.
+4000002760003184	This card requires authentication on all transactions, regardless of how the card is set up.
+4000008260003178	This card requires authentication for one-time payments. All payments will be declined with an insufficient_funds failure code even after being successfully authenticated or previously set up.
+4000003800000446	This card requires authentication for one-time and other on-session payments. However, all off-session payments will succeed as if the card has been previously set up.
+4000053560000011	This card requires authentication on all transactions, regardless of how you set it up. You can only use this card for INR payments.
+3D Secure test card numbers and tokens 
+Not all cards support 3D Secure or require the customer be redirected to their card issuer’s authentication page. Use the following card information to test 3D Secure payments.
+
+
+Card numbers
+
+Tokens
+
+PaymentMethods
+NUMBER	3D SECURE USAGE	DESCRIPTION
+4000000000003220	Required	3D Secure 2 authentication must be completed for the payment to be successful. By default, your Radar rules will request 3D Secure authentication for this card.
+4000000000003063	Required	3D Secure authentication must be completed for the payment to be successful. By default, your Radar rules will request 3D Secure authentication for this card.
+4000008400001629	Required	3D Secure authentication is required, but payments will be declined with a card_declined failure code after authentication. By default, your Radar rules will request 3D Secure authentication for this card.
+4000008400001280	Required	3D Secure authentication is required, but the 3D Secure lookup request will fail with a processing error. Payments will be declined with a card_declined failure code. By default, your Radar rules will request 3D Secure authentication for this card.
+4000000000003055	Supported	3D Secure authentication may still be performed, but is not required. By default, your Radar rules will not request 3D Secure authentication for this card.
+4000000000003097	Supported	3D Secure authentication may still be performed, but is not required. However, attempts to perform 3D Secure result in a processing error. By default, your Radar rules will not request 3D Secure authentication for this card.
+4242424242424242	Supported	3D Secure is supported for this card, but this card is not enrolled in 3D Secure. This means that if 3D Secure is requested by your Radar rules, the customer will not go through additional authentication. By default, your Radar rules will not request 3D Secure authentication for this card.
+378282246310005	Not supported	3D Secure is not supported on this card and cannot be invoked. The PaymentIntent will proceed without performing authentication.
+All other Visa and Mastercard test cards do not require authentication from the customer’s card issuer.
+
+Testing for specific responses and errors 
+The following test cards can be used to create payments that produce specific responses—useful for testing different scenarios and error codes. Verification checks only run when the required information is provided (e.g., for cvc_check to be set to fail, a CVC code must be provided).
+
+
+Card numbers
+
+Tokens
+
+PaymentMethods
+NUMBER	DESCRIPTION
+4000000000000077	Charge succeeds and funds will be added directly to your available balance (bypassing your pending balance).
+4000003720000278	Charge succeeds and funds will be added directly to your available balance (bypassing your pending balance).
+4000000000000093	Charge succeeds and domestic pricing is used (other test cards use international pricing). This card is only significant in countries with split pricing.
+4000000000000010	The address_line1_check and address_zip_check verifications fail. If your account is blocking payments that fail postal code validation, the charge is declined.
+4000000000000028	Charge succeeds but the address_line1_check verification fails.
+4000000000000036	The address_zip_check verification fails. If your account is blocking payments that fail postal code validation, the charge is declined.
+4000000000000044	Charge succeeds but the address_zip_check and address_line1_check verifications are both unavailable.
+4000000000005126	Charge succeeds but refunding a captured charge fails asynchronously with a failure_reason of expired_or_canceled_card. Note that because refund failures are asynchronous, the refund will appear to be successful at first and will only have the failed status on subsequent fetches. We also notify you of refund failures using the charge.refund.updated webhook event.
+4000000000000101	If a CVC number is provided, the cvc_check fails. If your account is blocking payments that fail CVC code validation, the charge is declined.
+4000000000000341	Attaching this card to a Customer object succeeds, but attempts to charge the customer fail.
+4000000000009235	Results in a charge with a risk_level of elevated.
+4000000000004954	Results in a charge with a risk_level of highest.
+4100000000000019	Results in a charge with a risk_level of highest. The charge is blocked as it’s considered fraudulent.
+4000000000000002	Charge is declined with a card_declined code.
+4000000000009995	Charge is declined with a card_declined code. The decline_code attribute is insufficient_funds.
+4000000000009987	Charge is declined with a card_declined code. The decline_code attribute is lost_card.
+4000000000009979	Charge is declined with a card_declined code. The decline_code attribute is stolen_card.
+4000000000000069	Charge is declined with an expired_card code.
+4000000000000127	Charge is declined with an incorrect_cvc code.
+4000000000000119	Charge is declined with a processing_error code.
+4242424242424241	Charge is declined with an incorrect_number code as the card number fails the Luhn check.
+5555555555554220	Charge succeeds and returns a brand_product of MWE.
+By default, passing address or CVC data with the card number causes the address and CVC checks to succeed. If this information isn’t specified, the value of the checks is null. Any expiration date in the future is considered valid.
+
+You can also provide invalid card details to test specific error codes resulting from incorrect information being provided. For example:
+
+invalid_expiry_month: Use an invalid month (e.g., 13)
+invalid_expiry_year: Use a year in the past (e.g., 1970)
+invalid_cvc: Use a two digit number (e.g., 99)
+Cartes Bancaires test card numbers 
+In test mode, you can use the test cards below to simulate a Cartes Bancaires charge:
+
+NUMBER	DESCRIPTION
+4000002500001001	Creates a Cartes Bancaires card payment method co-branded with Visa.
+5555552500001001	Creates a Cartes Bancaires card payment method co-branded with Mastercard.
+Disputes 
+In test mode, you can use the test cards below to simulate a disputed transaction:
+
+
+Card numbers
+
+Tokens
+
+PaymentMethods
+NUMBER	DESCRIPTION
+4000000000000259	With default account settings, charge succeeds, only to be disputed as fraudulent. This type of dispute is protected if 3D Secure was run.
+4000000000002685	With default account settings, charge succeeds, only to be disputed as product not received. This type of dispute is not protected if 3D Secure was run.
+4000000000001976	With default account settings, charge succeeds, only to be disputed as an inquiry.
+4000000000005423	With default account settings, charge succeeds, only to receive an early fraud warning.
+Submit either of the following values for uncategorized_text to test a won or lost dispute outcome:
+
+EVIDENCE	DESCRIPTION
+winning_evidence	The dispute is closed and marked as won. Your account is credited the amount of the charge and related fees.
+losing_evidence	The dispute is closed and marked as lost. Your account is not credited.
+You can also use these values to test dispute outcomes in the Dashboard. Enter one of these values into the Additional Information field during evidence submission and then click Submit evidence.
+
+Rate limits 
+It is extremely unlikely for users to experience any rate limits with normal usage of the API, even at high volume. The most common causes for a user to experience rate limits are bugs, bulk data fetches, or extreme load testing.
+
+Should your requests begin to receive 429 HTTP errors, reduce the frequency of your requests. Each failed request is perfectly safe to retry as rate limiting takes place before any other action and prevents the request from being processed. When reducing your request frequency, we recommend an exponential backoff by first waiting one second before trying again. If your request continues to receive the same response, wait two seconds, then four seconds, etc.
+
+The rate limit in test mode is lower than the one in live mode. If you are experiencing rate limits but are unable to determine why, please let us know.
+
+Sources 
+Use the following information when testing payments using Sources.
+
+Redirect sources
+When creating a test Source object that uses a redirect flow (e.g., iDEAL), you can follow the URL returned in the redirect[url] field. This leads to a Stripe page that displays information about the API request, and where you can either authorize or cancel the payment.
+
+Authorizing the payment redirects you to the URL specified in redirect[return_url].
+
+BECS Direct Debit in Australia
+You can create a test PaymentIntent that either succeeds or fails by doing the following:
+
+Create a test PaymentMethod with the test BSB 000-000 and a test account number from the list below.
+Use the resulting PaymentMethod in a confirmAuBecsDebitPayment request to create the test charge.
+Test account numbers 
+ACCOUNT NUMBER	DESCRIPTION
+000123456	The PaymentIntent status transitions from processing to succeeded. The mandate status remains active.
+900123456	The PaymentIntent status transitions from processing to succeeded (with a three-minute delay). The mandate status remains active.
+111111113	The PaymentIntent status transitions from processing to requires_payment_method with an account_closed failure code. The mandate status will become inactive.
+111111116	The PaymentIntent status transitions from processing to requires_payment_method with a no_account failure code. The mandate status will become inactive.
+222222227	The PaymentIntent status transitions from processing to requires_payment_method with a refer_to_customer failure code. The mandate status will remain active.
+922222227	The PaymentIntent status transitions from processing to requires_payment_method with a refer_to_customer failure code (with a three-minute delay). The mandate status will remain active.
+333333335	The PaymentIntent status transitions from processing to requires_payment_method with a debit_not_authorized failure code. The mandate status will become inactive.
+SEPA Direct Debit
+You can create a test PaymentIntent that either succeeds or fails by doing the following:
+
+Create a test PaymentMethod with a test account number.
+Use the resulting PaymentMethod in a confirmSepaDebitPayment request to create the test charge.
+Test account numbers 
+
+Austria
+ACCOUNT NUMBER	DESCRIPTION
+AT611904300234573201	The PaymentIntent status transitions from processing to succeeded.
+AT321904300235473204	The PaymentIntent status transitions from processing to succeeded after three minutes.
+AT861904300235473202	The PaymentIntent status transitions from processing to requires_payment_method.
+AT051904300235473205	The PaymentIntent status transitions from processing to requires_payment_method after three minutes.
+AT591904300235473203	The PaymentIntent status transitions from processing to succeeded, but a dispute is immediately created.
+Webhooks 
+GETTING STARTED 
+See Using Webhooks to learn how to setup and configure an endpoint.
+
+To test your integration, perform actions using the API (in test mode) to send legitimate events to your endpoint. For instance, creating a charge triggers the charge.succeeded event that contains the charge data. You can then use the API to verify the resulting event data. If you’re migrating to the Payment Intents API, also see Monitoring a PaymentIntent with Webhooks.
+
+You can also send test events to your integration’s endpoint within your account’s webhooks settings. However, the event data contained within these events is fabricated and not available in the API—its purpose is only to test that your endpoint is working and configured correctly.
+
+See also
+Testing ACH charges
+Testing your Bacs Direct Debit integration
+Testing your Connect integration
+Was this page helpful?
+
+Yes
+
+No
+

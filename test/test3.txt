@@ -1,0 +1,50 @@
+Test Credit Card Numbers
+Below is a list of test credit card numbers to be used with the test environment. They will pass Luhn’s MOD-10 algorithm, but have no actual accounts associated with them. Any expiration date from the future will work.
+
+American Express
+3782 82246 310005
+3714 49635 398431
+Corporate:
+3787 34493 671000
+
+Diners Club
+3852 0000 023237
+3056 9309 025904
+
+Discover
+6011 0009 9100 1201
+6011 1111 1111 1117
+6011 0009 9013 9424
+
+JCB
+3530 1420 1995 5859
+3530 1113 3330 0000
+3566 0020 2036 0505
+
+MasterCard
+5499 7400 0000 0057
+5555 5555 5555 4444
+5105 1051 0510 5100
+
+Visa
+4111 1111 1111 1111
+4242 4242 4242 4242
+4012 8888 8888 1881
+4222 2222 22222
+
+These numbers are provided for informational purposes. Test numbers with future expiration dates will work in Web Payment Software Payment Pages, Virtual Terminal, and Gateway API set to test mode.
+
+Below are CVV2, CVC2, CID Security Codes to use with test credit card numbers in Web Payment Software's environment.
+
+CVV Code	Card Type	Response Code	Response Text
+999*	Visa	M	Match
+998*	MasterCard	M	Match
+996*	Discover	M	Match
+996*	Diners Club	M	Match
+9997*	Amex	M	Match
+123**	Non-Amex	N7	CVV2, CVC2, CID Mismatch
+1234**	Amex	EC	CID FORMAT ERROR
+*Use to simulate successful verification.
+**Use these codes to simulate security code failures.
+
+
